@@ -33,7 +33,6 @@ class ReservationFactory extends Factory
             'reservation_date' => $reservationDate,
             'start_time' => sprintf('%02d:00',$startTime),
             'end_time' => sprintf('%02d:00',$endTime),
-            'reservation_status' => $this->faker->randomElement(['pendiente','confirmada','cancelada']),
             'payment_status' => $this->faker->randomElement(['pendiente','pagado','fallido']),
             'total_amount' => 50,
         ];
