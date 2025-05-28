@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CordinadorAreaController;
+use App\Http\Controllers\CordinadorUsuarioController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -75,4 +76,6 @@ Route::resource('areas', AreaController::class);
 Route::resource('cordinadores', CordinadorAreaController::class);
 Route::get('/areas/{area}/cordinadores', [AreaController::class, 'getCordinadores'])->name('areas.cordinadores');
 
+Route::resource('cordinador_usuarios', CordinadorUsuarioController::class);
+Route::get('/coordinadores-por-area/{area_id}', [CordinadorUsuarioController::class, 'getCoordinadores']);
 

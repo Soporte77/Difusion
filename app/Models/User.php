@@ -73,4 +73,8 @@ class User extends Authenticatable
     {
         return "{$this->nombres} {$this->apellidos}";
     }
+    public function cordinadorAreas()
+    {
+        return $this->hasMany(CordinadorArea::class);
+    }
 }
