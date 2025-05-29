@@ -231,7 +231,7 @@ class ReservationController extends Controller{
     }
 
     public function reservationEvidences($iduser,$fecha){
-        $reservations = Reservation::where('user_id',$iduser)->where('reservation_date',$fecha)->get();
+        $reservations = Reservation::where('user_id',$iduser)->where('reservation_date',$fecha)->where('reservation_status', '!=', 'cancelada')->get();
         return $reservations;
     }
 
