@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use App\Models\CordinadorArea;
+use App\Models\CordinadorUsuario;
 use App\Models\User;
 use App\Models\Reservation;
 use App\Models\ReservationDetail;
@@ -29,9 +30,18 @@ class ReservationController extends Controller{
     }
 
     // Método para mostrar las reservas del cliente autenticado
+    // public function indexcliente() {
+    //     $userId = Auth::user()->id; // Obtener el ID del usuario autenticado
+    //     $reservations = Reservation::where('user_id', $userId)->orderBy('id','desc')->get(); // Obtener solo las reservas del usuario
+    //     return view('cliente.index', compact('reservations'));
+    // }
+
     public function indexcliente() {
         $userId = Auth::user()->id; // Obtener el ID del usuario autenticado
-        $reservations = Reservation::where('user_id', $userId)->orderBy('id','desc')->get(); // Obtener solo las reservas del usuario
+        $reservations = Reservation::with(['user', 'consultant', 'area']) // Cargar relaciones
+                                   ->where('user_id', $userId) // Filtrar por usuario autenticado
+                                   ->orderBy('id','desc') // Ordenar por ID descendente
+                                   ->get(); // Obtener resultados
         return view('cliente.index', compact('reservations'));
     }
 
@@ -47,57 +57,51 @@ class ReservationController extends Controller{
     // Método para mostrar la vista de creación de una reserva desde el lado del cliente
     public function createCliente() {
         $consultants = User::where('rol_id', 2)->whereNull('deleted_at')->get();
-        return view('cliente.reserva', compact('consultants'));
+        $areas = Area::all();
+        return view('cliente.reserva', compact('consultants','areas'));
     }
 
     // Método para almacenar una nueva reserva
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $datosUser = Auth::user();
+
         // Validación de los datos recibidos
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'consulta_id' => 'nullable|exists:users,id',
+            'area_id' => 'required|exists:areas,id', // <-- Validación de área
             'reservation_date' => 'required|date',
             'start_time' => 'required|date_format:H:i|after_or_equal:09:00|before_or_equal:15:00',
             'end_time' => 'required|date_format:H:i|before_or_equal:15:00',
-            // 'reservation_status' => 'required|in:pendiente,confirmada,cancelada',
             'foto_evidencia' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-
 
         // Almacenar la foto si fue proporcionada
         $fotoPath = null;
         if ($request->hasFile('foto_evidencia')) {
-            $fotoPath = $request->file('foto_evidencia')->store('foto_evidencia', 'public'); // Almacena la foto en el sistema de archivos
+            $fotoPath = $request->file('foto_evidencia')->store('foto_evidencia', 'public');
         }
 
-        // Creación de la reserva
+        // Crear la reserva
         $reservation = Reservation::create([
             'user_id' => $request->user_id,
             'consulta_id' => $request->consulta_id,
+            'area_id' => $request->area_id, // <-- Guardar área
             'reservation_date' => $request->reservation_date,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
-            // 'reservation_status' => $request->reservation_status,
             'foto_evidencia' => $fotoPath,
         ]);
 
-        // Envío de correo de confirmación
-        // $this->sendConfirmationEmail($reservation);
-
-        // // Envío de mensaje de WhatsApp si el usuario tiene teléfono
-        // $user = User::find($request->user_id);
-        // $userPhone = $user->teléfono;
-        // if ($userPhone) {
-        //     $this->sendWhastsAppMessage($userPhone, $this->generateWhatsAppMessage($reservation, $user));
-        // }
-        if($datosUser-> rol_id == 3){
+        // Redirección según el rol del usuario
+        if ($datosUser->rol_id == 3) {
             return redirect()->route('cliente.reservas')->with('success', 'Reserva creada correctamente');
-        }else{
+        } else {
             return redirect()->route('reservations.index')->with('success', 'Reserva creada correctamente');
         }
-
     }
+
 
     // Método para mostrar el formulario de edición de una reserva
     public function edit(string $id) {
@@ -151,40 +155,6 @@ class ReservationController extends Controller{
         ]);
     }
 
-
-    // public function getAllReservations()
-    // {
-    //     $reservations = Reservation::all();
-    //     $events = [];
-    //     foreach($reservations as $reservation){
-    //         $color = '#28a745';
-    //         $bordercolor = '#28a745';
-
-    //         if($reservation->reservation_status === 'pendiente'){
-    //             $color = '#ffc107';
-    //             $bordercolor = '#ffc107';
-    //         } elseif($reservation->reservation_status === 'cancelada'){
-    //             $color = '#dc3545';
-    //             $bordercolor = '#dc3545';
-    //         }
-
-    //         $countUploadImages = 0;
-    //         $countUploadImages = Reservation::where('user_id',$reservation->user_id)->where('reservation_date',$reservation->reservation_date)->count();
-
-    //         // Crear el evento con el ID de usuario
-    //         $events[] = [
-    //             'user_id' => $reservation->user_id,  // Añadimos el user_id de usuario
-    //             'reservation_date' => $reservation->reservation_date,
-    //             'title' => '('.$countUploadImages.') ' . $reservation->user->nombres . ' ' . $reservation->user->apellidos,
-    //             'start' => $reservation->reservation_date.'T'.$reservation->start_time,
-    //             'end' => $reservation->reservation_date.'T'.$reservation->end_time,
-    //             'backgroundColor' => $color,
-    //             'borderColor' => $bordercolor,
-    //         ];
-    //     }
-
-    //     return response()->json($events);
-    // }
 
     public function getAllReservations()
     {
@@ -294,14 +264,7 @@ class ReservationController extends Controller{
 
     public function getReservationsAsesor() {
         $consultantId = Auth::user()->id;
-
-        // $areas = CordinadorArea::where('user_id', $consultantId)->pluck('area_id');
-
-        // $reservations = Reservation::whereIn('area_id', $areas)
-        //     ->with('user')
-        //     ->orderBy('start_time') // Para que la primera hora sea la que se use
-        //     ->get();
-        $reservations = Reservation::where('consulta_id', $consultantId)
+        $reservations = Reservation::where('consulta_id', $consultantId)->where('reservation_status', '!=', 'cancelada')
             ->with('user')
             ->orderBy('start_time') // Para que la primera hora sea la que se use
             ->get();
@@ -542,5 +505,18 @@ class ReservationController extends Controller{
             $query->where('user_id',$userId);
         })->get();
         return view('cliente.pagos',compact('payments'));
+    }
+
+    public function getCoordinadores($area_id)
+    {
+        $userId = Auth::id();
+
+        $coordinadores = CordinadorUsuario::with('cordinador') // Relación a User
+            ->where('user_id', $userId)
+            ->where('area_id', $area_id)
+            ->get()
+            ->pluck('cordinador'); // Solo los usuarios coordinadores
+
+        return response()->json($coordinadores);
     }
 }

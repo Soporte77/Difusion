@@ -79,3 +79,4 @@ Route::get('/areas/{area}/cordinadores', [AreaController::class, 'getCordinadore
 Route::resource('cordinador_usuarios', CordinadorUsuarioController::class);
 Route::get('/coordinadores-por-area/{area_id}', [CordinadorUsuarioController::class, 'getCoordinadores']);
 
+Route::get('/coordinadores/{area_id}', [ReservationController::class, 'getCoordinadores'])->name('coordinadores.area');
