@@ -12,7 +12,7 @@
                             <img src="{{ asset('assets/images/Logo_blanco-1200px.png') }}" alt="" height="150">
                         </a>
                     </div>
-                    <p class="mt-3 fs-15 fw-medium">Sistema de Gestión de Calendario</p>
+                    <p class="mt-3 fs-15 fw-medium">Sistema de Gestión de Difusiónes</p>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
                     <div class="card-body p-4">
                         <div class="text-center mt-2">
                             <h5 class="text-primary">Crear Nueva Cuenta !</h5>
-                            <p class="text-muted">Registrese para continuar con la Reserva.</p>
+                            <p class="text-muted">Registrese para continuar con la Difusión.</p>
                         </div>
                         <div class="p-2 mt-4">
                             <form class="needs-validation" method="POST" action="{{ route('register') }}" enctype="multipart/form-data">

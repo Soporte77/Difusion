@@ -80,10 +80,9 @@ class UserController extends Controller
             'nombres' => 'required|string|max:255',
             'apellidos' => 'required|string|max:255',
             'telefono' => 'required|string|max:15',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id, // Permite el mismo email para el usuario actual
             'rol_id' => 'required|integer',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'password' => 'nullable|max:255',
         ]);
 
         // Encontrar el usuario por su ID
@@ -95,25 +94,18 @@ class UserController extends Controller
             $usuario->foto = $fotoPath;
         }
 
-        // Asignar valores actualizados
-        $usuario->nombres = $request->nombres;
-        $usuario->apellidos = $request->apellidos;
-        $usuario->telefono = $request->telefono;
-        $usuario->email = $request->email;
-        $usuario->rol_id = $request->rol_id;
+        // Actualización de los datos del usuario
+        $usuario->update([
+            'nombres' => $request->nombres,
+            'apellidos' => $request->apellidos,
+            'telefono' => $request->telefono,
+            'email' => $request->email,
+            'rol_id' => $request->rol_id,
+        ]);
 
-        // Solo actualizar la contraseña si se proporcionó
-        if ($request->filled('password')) {
-            $usuario->password = Hash::make($request->password);
-        }
-
-        // Guardar los cambios
-        $usuario->save();
-
-        // Redirigir con mensaje de éxito
+        // Redirigir a la lista de usuarios con un mensaje de éxito
         return redirect()->route('usuarios.index')->with('success', 'Registro Actualizado Correctamente');
     }
-
 
     // Método para eliminar un usuario de la base de datos
     public function destroy($id)

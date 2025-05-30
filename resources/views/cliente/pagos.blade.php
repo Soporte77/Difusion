@@ -24,14 +24,14 @@
                 <h5 class="card-title mb-0">Pagos</h5>
             </div>
             <div class="card-body">
-                <a href="{{ route('cliente.reserva') }}" class="btn btn-primary waves-effect waves-light">Nueva Reserva</a>
+                <a href="{{ route('cliente.reserva') }}" class="btn btn-primary waves-effect waves-light">Nueva Difusión</a>
                 <br>
                 <br>
                 <table id="paymentsTable" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                     <thead>
                         <tr>
                             <th>Consultor</th>
-                            <th>Fecha de Reserva</th>
+                            <th>Fecha de Difusión</th>
                             <th>Hora Inicio</th>
                             <th>Hora Fin</th>
                             <th>Transaction ID</th>

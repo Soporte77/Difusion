@@ -10,12 +10,12 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="eventDetailsModalLabel">Detalles de la Reserva</h5>
+                        <h5 class="modal-title" id="eventDetailsModalLabel">Detalles de la Difusión</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body" id="seccionImprimir2">
                         <div v-for="(item, index) in fotos" :key="index">
-                            <p>Fecha de la Reserva: @{{ item.reservation_date }}</p>
+                            <p>Fecha de la Difusión: @{{ item.reservation_date }}</p>
                             <img :src="'/storage/' + item.foto_evidencia" alt="Foto de Evidencia" style="max-width: 100%; display: block; margin-top: 10px;">
                         </div>
                     </div>
