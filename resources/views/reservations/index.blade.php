@@ -4,12 +4,12 @@
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Listado de Reserva</h4>
+            <h4 class="mb-sm-0">Listado de Difusión</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Reservas</a></li>
-                    <li class="breadcrumb-item active">Lista de Reservas</li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Difusión</a></li>
+                    <li class="breadcrumb-item active">Lista de Difusión</li>
                 </ol>
             </div>
 
@@ -21,10 +21,10 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0">Reservas</h5>
+                <h5 class="card-title mb-0">Difusión</h5>
             </div>
             <div class="card-body">
-                <a href="{{ route('reservations.create') }}" class="btn btn-primary waves-effect waves-light">Nueva Reserva</a>
+                {{-- <a href="{{ route('reservations.create') }}" class="btn btn-primary waves-effect waves-light">Nueva Reserva</a> --}}
                 <br>
                 <br>
                 <table id="reservationsTable" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
@@ -46,7 +46,13 @@
                         @foreach ($reservations as $reservation)
                         <tr>
                             <td>{{ $reservation->id }}</td>
-                            <td>{{ $reservation->user->nombres }} {{ $reservation->user->apellidos }}</td>
+                            <td>
+                                @if ($reservation->user)
+                                    {{ $reservation->user->nombres }} {{ $reservation->user->apellidos }}
+                                @else
+                                    Usuario no existe
+                                @endif
+                            </td>
                             <td>{{ $reservation->area ? $reservation->area->nombre_area : 'Área no asignada' }}</td>
                             <td>
                                 {{ (!empty($reservation->consultant) && !empty($reservation->consultant->nombres) && !empty($reservation->consultant->apellidos))

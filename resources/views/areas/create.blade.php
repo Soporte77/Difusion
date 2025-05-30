@@ -13,8 +13,8 @@
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
-        <a href="{{ route('areas.index') }}" class="btn btn-secondary">Volver</a>
         <button type="submit" class="btn btn-success">Guardar</button>
+        <a href="{{ route('areas.index') }}" style="margin-left: 10px;" class="btn btn-secondary">Volver</a>
     </form>
 </div>
 @endsection

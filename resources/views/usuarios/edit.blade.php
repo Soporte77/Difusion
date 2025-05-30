@@ -93,8 +93,8 @@
 
                     <div class="col-xxl-3 col-md-6">
                         <div>
-                            <label for="password" class="form-label">{{ __('Contraseña') }}</label>
-                            <input type="text" class="form-control" id="password" name="password" value="password" readonly>
+                            <label for="password" class="form-label">{{ __('Contraseña (Si deja vacio no se cambiará)') }}</label>
+                            <input type="text" class="form-control" id="password" name="password">
                         </div>
                     </div>
 

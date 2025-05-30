@@ -8,9 +8,9 @@
         @csrf
 
         <div class="mb-3">
-            <label for="user_id" class="form-label">Usuario</label>
+            <label for="user_id" class="form-label">Cordinador</label>
             <select name="user_id" class="form-select" required>
-                <option value="">-- Seleccionar Usuario --</option>
+                <option value="">-- Seleccionar un cordinador --</option>
                 @foreach($usuarios as $user)
                     <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
                         {{ $user->nombres }} {{ $user->apellidos }}
@@ -41,9 +41,8 @@
             </select>
             @error('estado') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
-
-        <a href="{{ route('cordinadores.index') }}" class="btn btn-secondary">Cancelar</a>
         <button type="submit" class="btn btn-success">Guardar</button>
+        <a href="{{ route('cordinadores.index') }}" class="btn btn-secondary" style="margin-left: 20px;">Cancelar</a>
     </form>
 </div>
 @endsection

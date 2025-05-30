@@ -31,12 +31,11 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Área</th>
                             <th>Consultor</th>
                             <th>Fecha</th>
                             <th>Hora Inicio</th>
                             <th>Hora Fin</th>
-                            {{-- <th>Estado del Pago</th>
-                            <th>Estado del Reserva</th> --}}
                             <th>Foto Evidencia</th>
                             <th>Acciones</th>
                         </tr>
@@ -45,22 +44,14 @@
                         @foreach ($reservations as $reservation)
                         <tr>
                             <td>{{ $reservation->id }}</td>
+                            <td>{{ $reservation->area ? $reservation->area->nombre_area : 'Área no asignada' }}</td>
                             <td>
                                 {{ $reservation->consultant?->nombres ? $reservation->consultant->nombres . ' ' . $reservation->consultant->apellidos : 'Sin coordinador' }}
                             </td>
                             <td>{{ $reservation->reservation_date }}</td>
                             <td>{{ $reservation->start_time }}</td>
                             <td>{{ $reservation->end_time }}</td>
-                            {{-- <td>{{ $reservation->payment_status }}</td>
-                            <td>
-                                @if($reservation->reservation_status == 'cancelada')
-                                    <span class="badge bg-danger">cancelada</span>
-                                @elseif ($reservation->reservation_status == 'confirmada')
-                                    <span class="badge bg-success">confirmada</span>
-                                @else
-                                    <span class="badge bg-warning">pendiente</span>
-                                @endif
-                            </td> --}}
+
                             <td>
                                 <img src="{{ asset('storage/' . $reservation->foto_evidencia) }}" alt="Foto Evidencia" class="img-fluid rounded-circle" style="width: 50px; height: 50px;">
                             </td>

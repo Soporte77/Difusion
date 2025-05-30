@@ -78,11 +78,7 @@
 
                 <li class="menu-title"><span>Administrador</span></li>
 
-                {{-- <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{ route('reservations.create') }}">
-                        <i class="ri-dashboard-2-line"></i> <span>Nueva Reserva</span>
-                    </a>
-                </li> --}}
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('areas.index') }}">
                         <i class="ri-dashboard-2-line"></i> <span>Areas</span>
@@ -92,6 +88,13 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('cordinadores.index') }}">
                         <i class="ri-dashboard-2-line"></i> <span>Asignar cordinador a área</span>
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('cordinador_usuarios.index') }}">
+                        <i class="ri-dashboard-2-line"></i> <span>Asignar cordinador a usuario</span>
                     </a>
                 </li>
 
